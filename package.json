@@ -1,0 +1,17 @@
+{
+  "name": "user-manager",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "start:backend": "npm --workspace packages/backend run start",
+    "start:frontend": "npm --workspace packages/frontend run start",
+    "ci": "npm workspaces run ci"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0"
+  }
+}

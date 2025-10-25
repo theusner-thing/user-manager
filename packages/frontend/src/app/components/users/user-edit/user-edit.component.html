@@ -1,0 +1,58 @@
+<p-dialog [(visible)]="visible" [modal]="true" [closable]="false" [header]="user ? 'Edit User' : 'Create User'" [style]="{'min-width': '30vw'}">
+  <form #userForm="ngForm" class="p-fluid">
+
+    <div class="p-field">
+      <label for="first">First name</label>
+    </div>
+    <div class="p-field">
+      <input id="first" name="firstName" pInputText [(ngModel)]="form.firstName" required #firstModel="ngModel" style="width:100%" />
+      <div *ngIf="firstModel.invalid && (firstModel.dirty || firstModel.touched)" class="p-error">First name is required</div>
+    </div>
+
+    <div class="p-field">
+      <label for="last">Last name</label>
+    </div>
+    <div class="p-field">
+      <input id="last" name="lastName" pInputText [(ngModel)]="form.lastName" required #lastModel="ngModel" style="width:100%" />
+      <div *ngIf="lastModel.invalid && (lastModel.dirty || lastModel.touched)" class="p-error">Last name is required</div>
+    </div>
+
+    <div class="p-field">
+      <label for="email">Email</label>
+    </div>
+    <div class="p-field">
+      <input id="email" #emailInput name="email" pInputText [(ngModel)]="form.email" required email #emailModel="ngModel" [ngClass]="{'p-invalid': !!errorMessage}" aria-invalid="{{!!errorMessage}}" style="width:100%" />
+      <div *ngIf="errorMessage" class="p-error" style="margin-top:.25rem">{{ errorMessage }}</div>
+      <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="p-error">
+        <span *ngIf="emailModel.errors?.['required']">Email is required</span>
+        <span *ngIf="emailModel.errors?.['email']">Enter a valid email address</span>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <label for="password">Password</label>
+    </div>
+    <div class="p-field">
+      <input id="password" name="password" type="password" pInputText [(ngModel)]="form.password" [required]="isCreateMode()" #pwdModel="ngModel" placeholder="{{ isCreateMode() ? '' : 'Leave empty to keep current password' }}" style="width:100%" />
+      <div *ngIf="pwdModel.invalid && (pwdModel.dirty || pwdModel.touched)" class="p-error">
+        <span *ngIf="pwdModel.errors?.['required']">Password is required</span>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <label for="role">Role</label>
+    </div>
+    <div class="p-field">
+      <select id="role" name="role" [(ngModel)]="form.role" class="p-inputtext p-component" style="width:100%">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Cancel" class="p-button-text" (click)="doCancel()"></button>
+    <button pButton type="button" label="Save" [disabled]="userForm.invalid" (click)="doSave()"></button>
+  </ng-template>
+</p-dialog>

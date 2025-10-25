@@ -1,0 +1,49 @@
+<div class="login-container">
+  <div class="login-card">
+    <p-card header="Login" class="login-card-content">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="p-field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            pInputText
+            formControlName="email"
+            placeholder="Enter your email"
+            [class.p-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          />
+          <small *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="p-error">
+            Email is required and must be valid
+          </small>
+        </div>
+
+        <div class="p-field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            pInputText
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.p-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          />
+          <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="p-error">
+            Password is required
+          </small>
+        </div>
+
+        <p-message *ngIf="error$ | async as error" severity="error" [text]="error" styleClass="p-mt-2"></p-message>
+
+        <div class="p-field p-mt-3">
+          <p-button
+            type="submit"
+            label="Login"
+            [loading]="loading$ | async"
+            [disabled]="loginForm.invalid"
+            styleClass="p-button-primary p-button-block"
+          ></p-button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>

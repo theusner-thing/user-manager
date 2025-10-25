@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: user_manager
+    ports:
+      - "6543:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    image: node:20
+    restart: unless-stopped
+    working_dir: /usr/src/app
+    volumes:
+      - ../packages/backend:/usr/src/app:cached
+      - /usr/src/app/node_modules
+    ports:
+      - "3333:3333"    # backend API
+      - "9229:9229"    # node debug port
+    environment:
+      NODE_ENV: development
+      PORT: 3333
+      # Use DB_* vars expected by the backend config (.env.example)
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: user_manager
+    depends_on:
+      - postgres
+    command: sh -c "npm install --no-audit --no-fund && npm run start:debug"
+
+  frontend:
+    image: node:20
+    restart: unless-stopped
+    working_dir: /usr/src/app
+    volumes:
+      - ../packages/frontend:/usr/src/app:cached
+      - /usr/src/app/node_modules
+    ports:
+      - "5200:5200"    # frontend dev server
+    environment:
+      CHOKIDAR_USEPOLLING: 'true'
+    depends_on:
+      - backend
+    # ensure the dev server listens on all interfaces so the host can reach it
+    command: sh -c "npm install --no-audit --no-fund && npm run start -- --host 0.0.0.0 --port 5200"

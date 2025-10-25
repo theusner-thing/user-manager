@@ -1,0 +1,118 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width:'40vw'}"></p-confirmDialog>
+<div class="user-list-component">
+    <h2 class="page-title">User Management</h2>
+
+    <p-card>
+        <p-toolbar>
+            <ng-template #end>
+                @if(isAdmin$ | async) {
+                    @if(!(!selectedUsers || !selectedUsers.length)) {
+                        <p-button
+                                severity="danger"
+                                icon="pi pi-trash"
+                                class="mr-2" text
+                                (click)="deleteSelectedUsers()"
+                                pTooltip="Delete Users"
+                                tooltipPosition="left"
+                        />
+                    }
+                    <p-button
+                            icon="pi pi-plus p-button-text"
+                            class="mr-2" text severity="secondary"
+                            (click)="createNewUser()"
+                            pTooltip="Create User"
+                            tooltipPosition="left"
+                    />
+                    <p-button
+                        icon="pi pi-download p-button-text"
+                        class="mr-2"
+                        (click)="downloadUsers()"
+                        text severity="secondary"
+                        pTooltip="Download Users"
+                        tooltipPosition="left"
+                    />
+                        <input type="file" #importInput accept=".csv,text/csv" style="display:none" (change)="onImportSelected($event)" />
+                        <p-button
+                            icon="pi pi-upload p-button-text"
+                            text severity="secondary"
+                            (click)="importInput.click()"
+                            pTooltip="Import Users"
+                            tooltipPosition="left"
+                        />
+                }
+            </ng-template>
+            <ng-template #start>
+                <p-iconfield iconPosition="left">
+                    <p-inputicon class="pi pi-search" />
+                    <input type="text"
+                           pInputText placeholder="Search"
+                           [(ngModel)]="searchTerm"
+                           (input)="onSearch($event.target.value)"/>
+                    @if(searchTerm) {
+                        <p-inputicon class="pi pi-times p-button-text" (click)="clearSearch()"/>
+                    }
+                </p-iconfield>
+            </ng-template>
+        </p-toolbar>
+
+        <p-table
+            [value]="(users$ | async) || []"
+            [loading]="loading$ | async"
+            [paginator]="true"
+            [rows]="10"
+            [(selection)]="selectedUsers"
+            [totalRecords]="(total$ | async) || 0"
+            [lazy]="true"
+            [rowHover]="true"
+            (onLazyLoad)="onLazyLoad($event)"
+            class="p-datatable-sm"
+            [rowsPerPageOptions]="[10, 25, 50]"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [showCurrentPageReport]="true"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+                    <th pSortableColumn="firstName">Name <p-sortIcon field="firstName"></p-sortIcon></th>
+                    <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+                    <th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon></th>
+                    <th pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-user>
+                <tr>
+                    <td style="width: 3rem">
+                        @if((currentUser$ | async)?.id !== user.id) {
+                            <p-tableCheckbox [value]="user" />
+                        }
+                    </td>
+                    <td>{{ user.firstName }} {{ user.lastName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <p-tag [value]="user.role" [severity]="user.role === 'admin' ? 'success' : 'info'"></p-tag>
+                    </td>
+                    <td>{{ user.createdAt | date : 'short' }}</td>
+                    <td>
+                        @if((isAdmin$ | async) || ((currentUser$ | async)?.id === user.id)) {
+                            <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-button-sm p-mr-2" (click)="editUser(user)" pTooltip="Edit User"></button>
+                        }
+                        @if((isAdmin$ | async) && ((currentUser$ | async)?.id !== user.id)) {
+                            <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm" (click)="confirmDelete(user)" pTooltip="Delete User"></button>
+                        }
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>
+<!-- Edit modal -->
+<app-user-edit
+    [user]="selectedUser"
+    [visible]="editDialogVisible"
+    [errorMessage]="inlineError"
+    (save)="onUserSaved($event)"
+    (cancel)="onCancelEdit()"
+></app-user-edit>
