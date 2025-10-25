@@ -75,7 +75,7 @@ Other components and behaviors (create/update 409 modal behavior, import flows, 
 - Send a temporary password email to newly created users (or when an admin resets a password).
 - Force users to change temporary passwords on first login.
 - Admin functionality: reset a user's password (generate a new temporary password and email it to the user).
-
+- Add language support
 
 ## Notes
 
