@@ -41,6 +41,14 @@
                             tooltipPosition="left"
                         />
                 }
+                <p-button
+                    severity="secondary"
+                    icon="pi pi-sync p-button-text"
+                    class="mr-2" text
+                    (click)="reloadUsers()"
+                    pTooltip="Reload Users"
+                    tooltipPosition="left"
+                />
             </ng-template>
             <ng-template #start>
                 <p-iconfield iconPosition="left">
@@ -73,7 +81,9 @@
         >
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+                    @if((isAdmin$ | async)) {
+                        <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+                    }
                     <th pSortableColumn="firstName">Name <p-sortIcon field="firstName"></p-sortIcon></th>
                     <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                     <th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon></th>
@@ -84,11 +94,13 @@
 
             <ng-template pTemplate="body" let-user>
                 <tr>
+                    @if((isAdmin$ | async)) {
                     <td style="width: 3rem">
                         @if((currentUser$ | async)?.id !== user.id) {
                             <p-tableCheckbox [value]="user" />
                         }
                     </td>
+                    }
                     <td>{{ user.firstName }} {{ user.lastName }}</td>
                     <td>{{ user.email }}</td>
                     <td>
@@ -100,7 +112,7 @@
                             <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-button-sm p-mr-2" (click)="editUser(user)" pTooltip="Edit User"></button>
                         }
                         @if((isAdmin$ | async) && ((currentUser$ | async)?.id !== user.id)) {
-                            <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm" (click)="confirmDelete(user)" pTooltip="Delete User"></button>
+                            <button pButton type="button" severity="danger" icon="pi pi-trash" class="p-button-text p-button-sm" (click)="confirmDelete(user)" pTooltip="Delete User"></button>
                         }
                     </td>
                 </tr>

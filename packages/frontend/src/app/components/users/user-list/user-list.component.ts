@@ -247,6 +247,7 @@ export class UserListComponent implements OnDestroy {
       header: 'Confirm Delete',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
+        // ensure we always clear selection and refresh the list after attempting delete
         try {
           const current = await firstValueFrom(this.currentUser$);
 
@@ -254,7 +255,10 @@ export class UserListComponent implements OnDestroy {
           const filtered = (this.selectedUsers || []).filter(u => !(current && current.id === u.id));
 
           const idsToDelete = filtered.map((u) => u.id);
-          if (idsToDelete.length === 0) return;
+          if (idsToDelete.length === 0) {
+            this.messageService.add({ severity: 'info', summary: 'No users deleted', detail: 'No deletable users were selected' });
+            return;
+          }
 
           const authState: any = await firstValueFrom(this.store.select('auth'));
           if (!authState?.accessToken) {
@@ -280,10 +284,12 @@ export class UserListComponent implements OnDestroy {
           const data = await res.json();
           const deleted = Number(data.deleted || 0);
           this.messageService.add({ severity: 'success', summary: 'Deleted', detail: `${deleted} user${deleted === 1 ? '' : 's'} deleted` });
-          this.selectedUsers = [];
-          this.loadUsers();
         } catch (e) {
           this.messageService.add({ severity: 'error', summary: 'Delete error', detail: String(e) });
+        } finally {
+          // clear selection and refresh users regardless of outcome
+          this.selectedUsers = [];
+          this.loadUsers();
         }
       },
       reject: () => {
@@ -301,6 +307,12 @@ export class UserListComponent implements OnDestroy {
         order: this.currentOrder,
       })
     );
+  }
+
+  /** Reload users from the server using the current filters and clear any selection */
+  reloadUsers() {
+    this.selectedUsers = [];
+    this.loadUsers();
   }
 
   onSearch(value?: string) {
