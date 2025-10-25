@@ -79,5 +79,5 @@ Other components and behaviors (create/update 409 modal behavior, import flows, 
 
 ## Notes
 
-- Default seeded admin user (when using the provided DB seed): `admin@example.com` / `admin@example.com`.
+- Default seeded admin user (when using the provided DB seed): `admin@silenceapi.com` / `admin@silenceapi.com`.
 - The docker compose stack mounts local source directories into containers for hot-reload during development. Consider creating Dockerfiles and image builds for CI or production use.

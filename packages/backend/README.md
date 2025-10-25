@@ -9,7 +9,7 @@ Quick start:
 3. cp .env.example .env
 4. npm run start:dev
 
-Default seeded admin: admin@example.com / password
+Default seeded admin: admin@silenceapi.com / password
 
 Using Docker Compose (Postgres)
 
@@ -43,7 +43,7 @@ This backend is a Nest-style Node API using TypeORM and JWT authentication. Key 
 
 ## Notes and developer tips
 
-- Default seeded admin user: `admin@example.com` / `admin@example.com` (created by the seed step when running the Docker-based setup).
+- Default seeded admin user: `admin@silenceapi.com` / `admin@silenceapi.com` (created by the seed step when running the Docker-based setup).
 - The import endpoint expects the uploaded file in memory (`file.buffer`) — avoid filesystem reads when providing uploads.
 - For client-side uploads and requests it's recommended to use Angular's `HttpClient` so any auth interceptors (token refresh) are applied automatically. Some client code in this repo currently uses `fetch` with manual Authorization headers.
 - If you change the password hashing algorithm or storage format, remember to migrate existing password hashes in the database.
