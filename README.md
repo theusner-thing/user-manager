@@ -39,6 +39,8 @@ The compose file will start Postgres (mapped to host port 6543), the backend API
 - Authentication using JWT (access + refresh tokens): `/auth/login`, `/auth/refresh`.
 - Users endpoints: list (pagination/search/sort), get, create, update, delete.
 - CSV import endpoint: `POST /users/import` (server-side PapaParse). Existing users (by email) are updated, new users are created; response contains `created`, `updated`, and `errors`.
+- CSV import endpoint: `POST /users/import` (server-side PapaParse). Existing users (by email) are updated, new users are created; response contains `created`, `updated`, and `errors`.
+  - A sample CSV suitable for import is included at `resources/user-import.csv` and can be used with the frontend import UI.
 - Bulk delete endpoint: `POST /users/bulk-delete` accepts `{ ids: string[] }` (admin-only).
 - Passwords are stored as `salt:hash` (SHA-256). The service offers helpers to create temporary passwords and to hash passwords on create/update.
 
