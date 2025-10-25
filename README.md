@@ -1,3 +1,5 @@
+![User Manager Logo](./packages/frontend/src/assets/logo.png)
+
 # User Manager
 
 Monorepo containing a small user-management application:
