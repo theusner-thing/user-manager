@@ -237,6 +237,9 @@ export class UserListComponent implements OnDestroy {
     this.actionsSub?.unsubscribe();
   }
 
+  /**
+   * TODO refactor generated function, e.g. avoid using fetch
+   */
   deleteSelectedUsers(): void {
     if (!this.selectedUsers || !this.selectedUsers.length) return;
 
@@ -480,10 +483,11 @@ export class UserListComponent implements OnDestroy {
     });
   }
 
-  onLogout() {
-    this.store.dispatch(logout());
-  }
-
+  /**
+   * TODO: Refactor generated function
+   *      - should not use fetch inside
+   * @param event
+   */
   async onImportSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files && input.files.length ? input.files[0] : null;
