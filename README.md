@@ -76,6 +76,7 @@ Other components and behaviors (create/update 409 modal behavior, import flows, 
 - Force users to change temporary passwords on first login.
 - Admin functionality: reset a user's password (generate a new temporary password and email it to the user).
 - Add language support
+- Implement Login Strategy to support external login providers (AWS, EntraID, etc...)
 
 ## Notes
 
