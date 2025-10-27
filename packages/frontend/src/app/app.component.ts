@@ -25,7 +25,6 @@ export class AppComponent {
   constructor(private store: Store<{ auth: AuthState }>, private router: Router) {
     this.user$ = this.store.select((s: any) => s.auth.user);
     // initialize route flag and update on navigation end
-    debugger;
     this.isLoginRoute = this.router.url.startsWith('/login') || this.router.url === '/';
     this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe((ev: any) => {
       const url = ev.urlAfterRedirects || ev.url;
