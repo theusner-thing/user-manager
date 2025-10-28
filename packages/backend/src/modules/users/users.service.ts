@@ -36,6 +36,13 @@ export class UsersService {
     return this.repo.findOne({ where: { email } });
   }
 
+  /**
+   * TODO - consider ordering via SQL instead ordering the result in memory
+   * @param page
+   * @param limit
+   * @param q
+   * @param order
+   */
   async search(page = 1, limit = 10, q?: string, order?: string): Promise<PaginationResult<User>> {
     const qb = this.repo.createQueryBuilder('u');
     if (q) {
