@@ -2,10 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ConflictException, BadRequestException } from '@nestjs/common';
 import { UsersService } from '../src/modules/users/users.service';
-import { User } from '../src/modules/users/user.entity';
 
 // Helper to create a UsersService with mocked repo and sharedService
-function makeService(overrides: Partial<any> = {}) {
+function makeService(overrides: any = {}) {
   const repo: any = {
     findOne: async (opts: any) => null,
     delete: async (id: string) => ({ affected: 1 }),
